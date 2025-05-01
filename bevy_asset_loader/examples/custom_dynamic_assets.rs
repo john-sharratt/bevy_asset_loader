@@ -2,7 +2,7 @@ use bevy::ecs::system::SystemState;
 use bevy::prelude::*;
 use bevy::reflect::TypePath;
 use bevy::render::render_asset::RenderAssetUsages;
-use bevy::utils::HashMap;
+use bevy::platform::collections::HashMap;
 use bevy_asset_loader::prelude::*;
 use bevy_common_assets::ron::RonAssetPlugin;
 
@@ -134,11 +134,14 @@ impl DynamicAsset for CustomDynamicAsset {
                     second
                         .data
                         .iter()
+                        .flat_map(|d| d.iter())
                         .enumerate()
                         .map(|(index, data)| {
                             data.saturating_add(
                                 *first
                                     .data
+                                    .as_ref()
+                                    .expect("Data has not loaded yet!")
                                     .get(index)
                                     .expect("Images do not have the same size!"),
                             )

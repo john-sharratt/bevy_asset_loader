@@ -42,16 +42,18 @@ impl FromWorld for CombinedImage {
         let player_image = images.get(&image_assets.player).unwrap();
         let tree_image = images.get(&image_assets.tree).unwrap();
         let mut combined = player_image.clone();
-        combined.data = combined
+        combined.data = Some(combined
             .data
+            .as_mut()
+            .unwrap()
             .drain(..)
             .enumerate()
             .map(|(index, player_value)| {
                 player_value
-                    .checked_add(tree_image.data[index])
+                    .checked_add(tree_image.data.as_ref().unwrap()[index])
                     .unwrap_or(u8::MAX)
             })
-            .collect();
+            .collect());
         CombinedImage {
             combined: images.add(combined),
         }

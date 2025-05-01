@@ -79,7 +79,7 @@ fn move_player(input: Res<ButtonInput<KeyCode>>, mut player: Query<&mut Transfor
         return;
     }
     movement = movement.normalize() * PLAYER_SPEED;
-    let mut transform = player.single_mut();
+    let mut transform = player.single_mut().unwrap();
     transform.translation += movement;
 }
 
